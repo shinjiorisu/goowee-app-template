@@ -65,12 +65,3 @@ Edit this README:
 
 ## License
 Goowee is Open Source software released under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
-
----
-
-```
-It is not what you do,
-it is how you do it.
-
-Happy coding :)
-```
