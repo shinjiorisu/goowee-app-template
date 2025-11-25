@@ -5,12 +5,14 @@ import goowee.audit.AuditService
 import goowee.exceptions.ArgsException
 import grails.gorm.DetachedCriteria
 import grails.gorm.multitenancy.CurrentTenant
+import grails.gorm.transactions.Transactional
 import groovy.util.logging.Slf4j
 
 import jakarta.annotation.PostConstruct
 
 @Slf4j
 @CurrentTenant
+@Transactional
 class ProductService {
 
     AuditService auditService
