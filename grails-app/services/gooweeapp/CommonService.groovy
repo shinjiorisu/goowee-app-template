@@ -7,10 +7,12 @@ import goowee.types.Money
 import goowee.types.Quantity
 import goowee.types.QuantityService
 import goowee.types.QuantityUnit
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import jakarta.annotation.PostConstruct
 
 @Slf4j
+@CompileStatic
 class CommonService {
 
     SecurityService securityService

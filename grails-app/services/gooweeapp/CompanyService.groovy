@@ -12,7 +12,6 @@ import jakarta.annotation.PostConstruct
 
 @Slf4j
 @CurrentTenant
-@Transactional
 class CompanyService {
 
     AuditService auditService
@@ -77,6 +76,7 @@ class CompanyService {
         return query.count()
     }
 
+    @Transactional
     TCompany create(Map args = [:]) {
         if (args.failOnError == null) args.failOnError = false
 
@@ -85,6 +85,7 @@ class CompanyService {
         return obj
     }
 
+    @Transactional
     TCompany update(Map args = [:]) {
         Serializable id = ArgsException.requireArgument(args, 'id')
         if (args.failOnError == null) args.failOnError = false
@@ -95,6 +96,7 @@ class CompanyService {
         return obj
     }
 
+    @Transactional
     void delete(Serializable id) {
         TCompany obj = get(id)
         obj.delete(flush: true, failOnError: true)

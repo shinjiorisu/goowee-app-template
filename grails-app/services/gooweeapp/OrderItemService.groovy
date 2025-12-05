@@ -12,7 +12,6 @@ import jakarta.annotation.PostConstruct
 
 @Slf4j
 @CurrentTenant
-@Transactional
 class OrderItemService {
 
     AuditService auditService
@@ -45,7 +44,7 @@ class OrderItemService {
     private Map getFetchAll() {
         // Add any relationship here (Eg. references to other DomainObjects or hasMany)
         return [
-                'relationshipName': 'join',
+                'relationshipName'   : 'join',
 
                 // hasMany relationships
                 'hasManyRelationship': 'join',
@@ -77,6 +76,7 @@ class OrderItemService {
         return query.count()
     }
 
+    @Transactional
     TOrderItem create(Map args = [:]) {
         if (args.failOnError == null) args.failOnError = false
 
@@ -96,6 +96,7 @@ class OrderItemService {
         return obj
     }
 
+    @Transactional
     TOrderItem update(Map args = [:]) {
         Serializable id = ArgsException.requireArgument(args, 'id')
         if (args.failOnError == null) args.failOnError = false
@@ -117,6 +118,7 @@ class OrderItemService {
         return obj
     }
 
+    @Transactional
     void delete(Serializable id) {
         TOrderItem obj = get(id)
         obj.delete(flush: true, failOnError: true)
