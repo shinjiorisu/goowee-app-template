@@ -3,6 +3,7 @@ package gooweeapp
 
 import goowee.properties.TenantPropertyService
 import goowee.security.SecurityService
+import goowee.tenants.TenantService
 import goowee.types.Money
 import goowee.types.Quantity
 import goowee.types.QuantityService
@@ -16,6 +17,7 @@ import jakarta.annotation.PostConstruct
 class CommonService {
 
     SecurityService securityService
+    TenantService tenantService
     TenantPropertyService tenantPropertyService
     QuantityService quantityService
     CompanyService companyService
@@ -32,11 +34,11 @@ class CommonService {
         // no-op
     }
 
-    void install(String tenantId) {
+    void tenantInstall() {
         tenantPropertyService.setString('PRIMARY_BACKGROUND_COLOR', '#255aa8')
         tenantPropertyService.setString('LOGIN_COPY', 'Copyright &copy; <a href="https://goowee.org">The Goowee Team</a><br/>All rights reserved')
 
-        securityService.updateGroup(tenantId: tenantId, name: 'USERS', landingPage: 'order')
+        securityService.updateGroup(tenantId: tenantService.currentTenantId, name: 'USERS', landingPage: 'order')
 
         quantityService.enableUnit(QuantityUnit.PCS)
     }

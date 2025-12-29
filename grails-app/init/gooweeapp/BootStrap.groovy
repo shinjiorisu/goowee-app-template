@@ -19,7 +19,7 @@ class BootStrap {
         }
 
         applicationService.onTenantInstall { String tenantId ->
-            commonService.install(tenantId)
+            commonService.tenantInstall()
         }
 
         applicationService.onDevInstall { String tenantId ->
