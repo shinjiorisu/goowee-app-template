@@ -43,6 +43,13 @@ repositories {
     mavenCentral()
     maven { url = "https://repo.grails.org/grails/restricted" }
     maven { url = "https://ossrh-staging-api.central.sonatype.com/service/local/" }
+//    maven {
+//        url = "https://maven.pkg.github.com/goowee-projects/goowee-solutions"
+//        credentials {
+//            username = localGradlePropertiesGitHubUsername
+//            password = localGradlePropertiesGitHubPassword
+//        }
+//    }
 }
 
 dependencies {
@@ -86,6 +93,7 @@ dependencies {
 
     // GOOWEE
     implementation "org.goowee:goowee-core:${gooweeVersion}"
+//    implementation "org.goowee:goowee-printing:${gooweeSolutionsVersion}"
 }
 
 java {
