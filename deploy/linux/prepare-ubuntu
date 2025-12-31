@@ -5,13 +5,12 @@
 echo "Installing Java..."
 sudo apt -y install openjdk-17-jre
 
-# We use ONLY iptables
 echo "Setting Debian/Ubuntu to use only iptables..."
 sudo systemctl disable ufw
 sudo ufw disable
 sudo apt install iptables-persistent -y
 
-echo "Setting Debian/Ubuntu firewall rules..."
+echo "Setting firewall rules..."
 
 # Reset
 sudo iptables -P INPUT ACCEPT

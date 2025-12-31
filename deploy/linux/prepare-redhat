@@ -5,15 +5,14 @@
 echo "Installing Java..."
 sudo dnf -y install java-17-openjdk
 
-# Firewall rules
 echo "Setting Fedora/RHEL/CentOS firewall rules..."
-
-# We use ONLY iptables
 sudo systemctl disable firewalld
 sudo systemctl stop firewalld
 sudo dnf -y install iptables-services
 sudo systemctl enable iptables
 sudo systemctl start iptables
+
+echo "Setting firewall rules..."
 
 # Reset
 sudo iptables -P INPUT ACCEPT
