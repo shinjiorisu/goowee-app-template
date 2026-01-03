@@ -46,8 +46,8 @@ repositories {
 //    maven {
 //        url = "https://maven.pkg.github.com/goowee-projects/goowee-solutions"
 //        credentials {
-//            username = localGradlePropertiesGitHubGooweeUsername
-//            password = localGradlePropertiesGitHubGooweePassword
+//            username = findProperty("localGradlePropertiesGitHubGooweeUsername") ?: System.getenv("GITHUB_GOOWEE_USERNAME")
+//            password = findProperty("localGradlePropertiesGitHubGooweePassword") ?: System.getenv("GITHUB_GOOWEE_TOKEN")
 //        }
 //    }
 }
