@@ -6,12 +6,15 @@ import goowee.exceptions.ArgsException
 import grails.gorm.DetachedCriteria
 import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.transactions.Transactional
+import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import jakarta.annotation.PostConstruct
 
 @Slf4j
 @CurrentTenant
+@CompileStatic
 class ProductService {
 
     AuditService auditService
@@ -21,6 +24,7 @@ class ProductService {
         // Executes only once when the application starts
     }
 
+    @CompileDynamic
     private DetachedCriteria<TProduct> buildQuery(Map filterParams) {
         def query = TProduct.where {}
 
@@ -69,7 +73,7 @@ class ProductService {
         return query.list(fetchParams)
     }
 
-    Integer count(Map filterParams = [:]) {
+    Number count(Map filterParams = [:]) {
         def query = buildQuery(filterParams)
         return query.count()
     }
@@ -84,6 +88,7 @@ class ProductService {
     }
 
     @Transactional
+    @CompileDynamic
     TProduct update(Map args = [:]) {
         Serializable id = ArgsException.requireArgument(args, 'id')
         if (args.failOnError == null) args.failOnError = false
