@@ -1,4 +1,4 @@
-package gooweeapp
+package template
 
 import goowee.commons.utils.LogUtils
 import goowee.elements.ElementsController
@@ -16,6 +16,10 @@ import goowee.types.QuantityUnit
 import grails.plugin.springsecurity.annotation.Secured
 import groovy.util.logging.Slf4j
 import jakarta.annotation.PostConstruct
+import template.CompanyService
+import template.OrderItemService
+import template.OrderService
+import template.ProductService
 
 @Slf4j
 @Secured(['ROLE_USER'])

@@ -1,6 +1,5 @@
 package gooweeapp
 
-
 import goowee.properties.TenantPropertyService
 import goowee.security.SecurityService
 import goowee.tenants.TenantService
@@ -11,6 +10,10 @@ import goowee.types.QuantityUnit
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import jakarta.annotation.PostConstruct
+import template.CompanyService
+import template.OrderItemService
+import template.OrderService
+import template.ProductService
 
 @Slf4j
 @CompileStatic
@@ -43,7 +46,7 @@ class CommonService {
         quantityService.enableUnit(QuantityUnit.PCS)
     }
 
-    void devInstall(String tenantId) {
+    void devInstall() {
         def myCompany = companyService.create(failOnError: true, name: 'My Company Inc.', isOwned: true, isClient: false, isSupplier: false)
         def showerWorld = companyService.create(failOnError: true, name: 'Shower World Inc.', isOwned: false, isClient: true, isSupplier: false)
         def showerLand = companyService.create(failOnError: true, name: 'Shower Land Inc.', isOwned: false, isClient: true, isSupplier: false)

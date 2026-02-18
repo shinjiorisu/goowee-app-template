@@ -1,8 +1,9 @@
-package gooweeapp
+package template
 
 import goowee.audit.AuditOperation
 import goowee.audit.AuditService
 import goowee.exceptions.ArgsException
+import gooweeapp.TCompany
 import grails.gorm.DetachedCriteria
 import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.transactions.Transactional

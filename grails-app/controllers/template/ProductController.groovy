@@ -1,4 +1,4 @@
-package gooweeapp
+package template
 
 import goowee.commons.utils.LogUtils
 import goowee.elements.components.TableRow
@@ -12,6 +12,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import groovy.util.logging.Slf4j
 
 import jakarta.annotation.PostConstruct
+import template.ProductService
 
 @Slf4j
 @Secured(['ROLE_USER'])

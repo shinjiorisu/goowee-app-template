@@ -1,4 +1,4 @@
-package gooweeapp
+package template
 
 import goowee.types.Money
 import goowee.types.Quantity

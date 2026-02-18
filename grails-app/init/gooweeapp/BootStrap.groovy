@@ -4,6 +4,8 @@ import goowee.core.ApplicationService
 import goowee.security.SecurityService
 import grails.web.servlet.mvc.GrailsHttpSession
 import jakarta.servlet.ServletContext
+import template.TCompany
+import template.TProduct
 
 class BootStrap {
 
@@ -23,7 +25,7 @@ class BootStrap {
         }
 
         applicationService.onDevInstall { String tenantId ->
-            commonService.devInstall(tenantId)
+            commonService.devInstall()
         }
 
         applicationService.beforeInit {
@@ -38,11 +40,14 @@ class BootStrap {
             applicationService.registerCredits('Software Development', 'Francesco Piceghello', 'Gianluca Sartori')
             applicationService.registerCredits('Testing', 'Francesco Piceghello', 'Gianluca Sartori')
 
+            // Main application features
             applicationService.registerFeature(
                     controller: 'order',
                     icon: 'fa-flag',
                     favourite: true,
             )
+
+            // Template features as an example
             applicationService.registerFeature(
                     controller: 'config',
             )

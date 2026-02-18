@@ -1,4 +1,4 @@
-package gooweeapp
+package template
 
 import goowee.tenants.TenantService
 import groovy.transform.CompileStatic

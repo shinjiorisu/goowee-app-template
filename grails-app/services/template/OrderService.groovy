@@ -1,8 +1,9 @@
-package gooweeapp
+package template
 
 import goowee.audit.AuditOperation
 import goowee.audit.AuditService
 import goowee.exceptions.ArgsException
+import gooweeapp.TOrder
 import grails.gorm.DetachedCriteria
 import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.transactions.Transactional
@@ -15,7 +16,7 @@ import jakarta.annotation.PostConstruct
 @Slf4j
 @CurrentTenant
 @CompileStatic
-class ProductService {
+class OrderService {
 
     AuditService auditService
 
@@ -25,8 +26,8 @@ class ProductService {
     }
 
     @CompileDynamic
-    private DetachedCriteria<TProduct> buildQuery(Map filterParams) {
-        def query = TProduct.where {}
+    private DetachedCriteria<TOrder> buildQuery(Map filterParams) {
+        def query = TOrder.where {}
 
         if (filterParams.containsKey('id')) query = query.where { id == filterParams.id }
 
@@ -34,7 +35,10 @@ class ProductService {
             String search = filterParams.find.replaceAll('\\*', '%')
             query = query.where {
                 true
-                        || name =~ "%${search}%"
+                        || ref =~ "%${search}%"
+                        || subject =~ "%${search}%"
+                        || supplier.name =~ "%${search}%"
+                        || client.name =~ "%${search}%"
             }
         }
 
@@ -46,7 +50,7 @@ class ProductService {
     private Map getFetchAll() {
         // Add any relationship here (Eg. references to other DomainObjects or hasMany)
         return [
-                'relationshipName': 'join',
+                'relationshipName'   : 'join',
 
                 // hasMany relationships
                 'hasManyRelationship': 'join',
@@ -61,11 +65,11 @@ class ProductService {
         ]
     }
 
-    TProduct get(Serializable id) {
+    TOrder get(Serializable id) {
         return buildQuery(id: id).get(fetch: fetchAll)
     }
 
-    List<TProduct> list(Map filterParams = [:], Map fetchParams = [:]) {
+    List<TOrder> list(Map filterParams = [:], Map fetchParams = [:]) {
         if (!fetchParams.sort) fetchParams.sort = [dateCreated: 'asc']
         if (!fetchParams.fetch) fetchParams.fetch = fetch
 
@@ -79,21 +83,21 @@ class ProductService {
     }
 
     @Transactional
-    TProduct create(Map args = [:]) {
+    TOrder create(Map args = [:]) {
         if (args.failOnError == null) args.failOnError = false
 
-        TProduct obj = new TProduct(args)
+        TOrder obj = new TOrder(args)
         obj.save(flush: true, failOnError: args.failOnError)
         return obj
     }
 
     @Transactional
     @CompileDynamic
-    TProduct update(Map args = [:]) {
+    TOrder update(Map args = [:]) {
         Serializable id = ArgsException.requireArgument(args, 'id')
         if (args.failOnError == null) args.failOnError = false
 
-        TProduct obj = get(id)
+        TOrder obj = get(id)
         obj.properties = args
         obj.save(flush: true, failOnError: args.failOnError)
         return obj
@@ -101,7 +105,7 @@ class ProductService {
 
     @Transactional
     void delete(Serializable id) {
-        TProduct obj = get(id)
+        TOrder obj = get(id)
         obj.delete(flush: true, failOnError: true)
         auditService.log(AuditOperation.DELETE, obj)
     }
