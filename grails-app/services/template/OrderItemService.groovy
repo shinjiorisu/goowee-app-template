@@ -4,7 +4,6 @@ import goowee.audit.AuditOperation
 import goowee.audit.AuditService
 import goowee.exceptions.ArgsException
 import goowee.types.Money
-import gooweeapp.TOrderItem
 import grails.gorm.DetachedCriteria
 import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.transactions.Transactional
