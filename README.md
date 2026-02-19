@@ -47,8 +47,8 @@ With the `JetBrains AI Assistant` plugin for `IntelliJ IDEA` + the `OpenAI Codex
 2. `Create a new CRUD main feature, with i18n, in package "myappname" for the entity “person” with columns: firstname, lastname, age, gender. Respect the naming conventions for GORM entities, services and controllers.`
 
 ### Manually
-1. Find and replace the string `dueunoapp` across all project files with your chosen name
-2. Rename the `dueunoapp` package accordingly
+1. Find and replace the string `gooweeapp` across all project files with your chosen name
+2. Rename the `gooweeapp` package accordingly
 3. You can find feature implementation examples in the `template` package
 
 ## Create the executable `.jar`
