@@ -15,7 +15,7 @@ import jakarta.annotation.PostConstruct
 @Slf4j
 @CurrentTenant
 @CompileStatic
-class ProductService {
+class TplOrderService {
 
     AuditService auditService
 
@@ -25,8 +25,8 @@ class ProductService {
     }
 
     @CompileDynamic
-    private DetachedCriteria<TProduct> buildQuery(Map filterParams) {
-        def query = TProduct.where {}
+    private DetachedCriteria<TTplOrder> buildQuery(Map filterParams) {
+        def query = TTplOrder.where {}
 
         if (filterParams.containsKey('id')) query = query.where { id == filterParams.id }
 
@@ -34,7 +34,10 @@ class ProductService {
             String search = filterParams.find.replaceAll('\\*', '%')
             query = query.where {
                 true
-                        || name =~ "%${search}%"
+                        || ref =~ "%${search}%"
+                        || subject =~ "%${search}%"
+                        || supplier.name =~ "%${search}%"
+                        || client.name =~ "%${search}%"
             }
         }
 
@@ -46,7 +49,7 @@ class ProductService {
     private Map getFetchAll() {
         // Add any relationship here (Eg. references to other DomainObjects or hasMany)
         return [
-                'relationshipName': 'join',
+                'relationshipName'   : 'join',
 
                 // hasMany relationships
                 'hasManyRelationship': 'join',
@@ -61,11 +64,11 @@ class ProductService {
         ]
     }
 
-    TProduct get(Serializable id) {
+    TTplOrder get(Serializable id) {
         return buildQuery(id: id).get(fetch: fetchAll)
     }
 
-    List<TProduct> list(Map filterParams = [:], Map fetchParams = [:]) {
+    List<TTplOrder> list(Map filterParams = [:], Map fetchParams = [:]) {
         if (!fetchParams.sort) fetchParams.sort = [dateCreated: 'asc']
         if (!fetchParams.fetch) fetchParams.fetch = fetch
 
@@ -79,21 +82,21 @@ class ProductService {
     }
 
     @Transactional
-    TProduct create(Map args = [:]) {
+    TTplOrder create(Map args = [:]) {
         if (args.failOnError == null) args.failOnError = false
 
-        TProduct obj = new TProduct(args)
+        TTplOrder obj = new TTplOrder(args)
         obj.save(flush: true, failOnError: args.failOnError)
         return obj
     }
 
     @Transactional
     @CompileDynamic
-    TProduct update(Map args = [:]) {
+    TTplOrder update(Map args = [:]) {
         Serializable id = ArgsException.requireArgument(args, 'id')
         if (args.failOnError == null) args.failOnError = false
 
-        TProduct obj = get(id)
+        TTplOrder obj = get(id)
         obj.properties = args
         obj.save(flush: true, failOnError: args.failOnError)
         return obj
@@ -101,7 +104,7 @@ class ProductService {
 
     @Transactional
     void delete(Serializable id) {
-        TProduct obj = get(id)
+        TTplOrder obj = get(id)
         obj.delete(flush: true, failOnError: true)
         auditService.log(AuditOperation.DELETE, obj)
     }

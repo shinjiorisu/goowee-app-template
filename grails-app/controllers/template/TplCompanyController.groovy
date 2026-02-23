@@ -1,24 +1,23 @@
 package template
 
 import goowee.commons.utils.LogUtils
+import goowee.elements.ElementsController
 import goowee.elements.components.TableRow
 import goowee.elements.contents.ContentCreate
 import goowee.elements.contents.ContentEdit
 import goowee.elements.contents.ContentTable
+import goowee.elements.controls.Checkbox
 import goowee.elements.controls.TextField
-import goowee.elements.ElementsController
 import goowee.elements.style.TextDefault
 import grails.plugin.springsecurity.annotation.Secured
 import groovy.util.logging.Slf4j
-
 import jakarta.annotation.PostConstruct
-import template.ProductService
 
 @Slf4j
 @Secured(['ROLE_USER'])
-class ProductController implements ElementsController {
+class TplCompanyController implements ElementsController {
 
-    ProductService productService
+    TplCompanyService tplCompanyService
 
     @PostConstruct
     void init() {
@@ -45,8 +44,10 @@ class ProductController implements ElementsController {
                     name: 'asc',
             ]
             columns = [
-                    'ref',
                     'name',
+                    'isOwned',
+                    'isClient',
+                    'isSupplier',
             ]
 
             body.eachRow { TableRow row, Map values ->
@@ -54,13 +55,13 @@ class ProductController implements ElementsController {
             }
         }
 
-        c.table.body = productService.list(c.table.filterParams, c.table.fetchParams)
-        c.table.paginate = productService.count(c.table.filterParams)
+        c.table.body = tplCompanyService.list(c.table.filterParams, c.table.fetchParams)
+        c.table.paginate = tplCompanyService.count(c.table.filterParams)
 
         display content: c
     }
 
-    private buildForm(TProduct obj = null, Boolean readonly = false) {
+    private buildForm(TTplCompany obj = null, Boolean readonly = false) {
         def c = obj
                 ? createContent(ContentEdit)
                 : createContent(ContentCreate)
@@ -71,14 +72,28 @@ class ProductController implements ElementsController {
         }
 
         c.form.with {
-            validate = TProduct
-            addField(
-                    class: TextField,
-                    id: 'ref',
-            )
+            validate = TTplCompany
             addField(
                     class: TextField,
                     id: 'name',
+            )
+            addField(
+                    class: Checkbox,
+                    id: 'isOwned',
+                    label: '',
+                    cols: 4,
+            )
+            addField(
+                    class: Checkbox,
+                    id: 'isClient',
+                    label: '',
+                    cols: 4,
+            )
+            addField(
+                    class: Checkbox,
+                    id: 'isSupplier',
+                    label: '',
+                    cols: 4,
             )
         }
 
@@ -95,7 +110,7 @@ class ProductController implements ElementsController {
     }
 
     def onCreate() {
-        def obj = productService.create(params)
+        def obj = tplCompanyService.create(params)
         if (obj.hasErrors()) {
             display errors: obj
             return
@@ -105,13 +120,13 @@ class ProductController implements ElementsController {
     }
 
     def edit() {
-        def obj = productService.get(params.id)
+        def obj = tplCompanyService.get(params.id)
         def c = buildForm(obj)
         display content: c, modal: true
     }
 
     def onEdit() {
-        def obj = productService.update(params)
+        def obj = tplCompanyService.update(params)
         if (obj.hasErrors()) {
             display errors: obj
             return
@@ -122,7 +137,7 @@ class ProductController implements ElementsController {
 
     def onDelete() {
         try {
-            productService.delete(params.id)
+            tplCompanyService.delete(params.id)
             display action: 'index'
 
         } catch (e) {

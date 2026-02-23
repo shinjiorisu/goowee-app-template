@@ -4,8 +4,8 @@ import goowee.core.ApplicationService
 import goowee.security.SecurityService
 import grails.web.servlet.mvc.GrailsHttpSession
 import jakarta.servlet.ServletContext
-import template.TCompany
-import template.TProduct
+import template.TTplCompany
+import template.TTplProduct
 
 class BootStrap {
 
@@ -33,8 +33,8 @@ class BootStrap {
         }
 
         applicationService.onInit {
-            applicationService.registerPrettyPrinter(TCompany, '${it.name}')
-            applicationService.registerPrettyPrinter(TProduct, '${it.ref} - ${it.name}')
+            applicationService.registerPrettyPrinter(TTplCompany, '${it.name}')
+            applicationService.registerPrettyPrinter(TTplProduct, '${it.ref} - ${it.name}')
 
             applicationService.registerCredits('Project Management', 'Gianluca Sartori')
             applicationService.registerCredits('Software Development', 'Francesco Piceghello', 'Gianluca Sartori')
@@ -42,23 +42,23 @@ class BootStrap {
 
             // Main application features
             applicationService.registerFeature(
-                    controller: 'order',
+                    controller: 'tplOrder',
                     icon: 'fa-flag',
                     favourite: true,
             )
 
             // Template features as an example
             applicationService.registerFeature(
-                    controller: 'config',
+                    controller: 'tplTemplate',
             )
             applicationService.registerFeature(
-                    parent: 'config',
-                    controller: 'company',
+                    parent: 'tplTemplate',
+                    controller: 'tplCompany',
                     icon: 'fa-house-flag',
             )
             applicationService.registerFeature(
-                    parent: 'config',
-                    controller: 'product',
+                    parent: 'tplTemplate',
+                    controller: 'tplProduct',
                     icon: 'fa-heart',
             )
         }

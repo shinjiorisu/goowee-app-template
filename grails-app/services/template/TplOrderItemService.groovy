@@ -3,6 +3,7 @@ package template
 import goowee.audit.AuditOperation
 import goowee.audit.AuditService
 import goowee.exceptions.ArgsException
+import goowee.types.Money
 import grails.gorm.DetachedCriteria
 import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.transactions.Transactional
@@ -15,9 +16,10 @@ import jakarta.annotation.PostConstruct
 @Slf4j
 @CurrentTenant
 @CompileStatic
-class OrderService {
+class TplOrderItemService {
 
     AuditService auditService
+    TplOrderService tplOrderService
 
     @PostConstruct
     void init() {
@@ -25,19 +27,17 @@ class OrderService {
     }
 
     @CompileDynamic
-    private DetachedCriteria<TOrder> buildQuery(Map filterParams) {
-        def query = TOrder.where {}
+    private DetachedCriteria<TTplOrderItem> buildQuery(Map filterParams) {
+        def query = TTplOrderItem.where {}
 
         if (filterParams.containsKey('id')) query = query.where { id == filterParams.id }
+        if (filterParams.containsKey('order')) query = query.where { order.id == filterParams.order }
 
         if (filterParams.find) {
             String search = filterParams.find.replaceAll('\\*', '%')
             query = query.where {
                 true
-                        || ref =~ "%${search}%"
-                        || subject =~ "%${search}%"
-                        || supplier.name =~ "%${search}%"
-                        || client.name =~ "%${search}%"
+                        || product.name =~ "%${search}%"
             }
         }
 
@@ -64,11 +64,11 @@ class OrderService {
         ]
     }
 
-    TOrder get(Serializable id) {
+    TTplOrderItem get(Serializable id) {
         return buildQuery(id: id).get(fetch: fetchAll)
     }
 
-    List<TOrder> list(Map filterParams = [:], Map fetchParams = [:]) {
+    List<TTplOrderItem> list(Map filterParams = [:], Map fetchParams = [:]) {
         if (!fetchParams.sort) fetchParams.sort = [dateCreated: 'asc']
         if (!fetchParams.fetch) fetchParams.fetch = fetch
 
@@ -82,29 +82,51 @@ class OrderService {
     }
 
     @Transactional
-    TOrder create(Map args = [:]) {
+    TTplOrderItem create(Map args = [:]) {
         if (args.failOnError == null) args.failOnError = false
 
-        TOrder obj = new TOrder(args)
+        TTplOrderItem obj = new TTplOrderItem(args)
         obj.save(flush: true, failOnError: args.failOnError)
+
+        if (!obj.hasErrors()) {
+            obj.price = new Money(obj.unitPrice * obj.quantity)
+            obj.save(flush: true, failOnError: args.failOnError)
+        }
+
+        tplOrderService.update(
+                id: obj.order.id,
+                total: obj.order.items ? obj.order.items*.price.sum() : obj.price,
+        )
+
         return obj
     }
 
     @Transactional
     @CompileDynamic
-    TOrder update(Map args = [:]) {
+    TTplOrderItem update(Map args = [:]) {
         Serializable id = ArgsException.requireArgument(args, 'id')
         if (args.failOnError == null) args.failOnError = false
 
-        TOrder obj = get(id)
+        TTplOrderItem obj = get(id)
         obj.properties = args
         obj.save(flush: true, failOnError: args.failOnError)
+
+        if (!obj.hasErrors()) {
+            obj.price = obj.unitPrice * obj.quantity
+            obj.save(flush: true, failOnError: args.failOnError)
+        }
+
+        tplOrderService.update(
+                id: obj.order.id,
+                total: obj.order.items ? obj.order.items*.price.sum() : obj.price,
+        )
+
         return obj
     }
 
     @Transactional
     void delete(Serializable id) {
-        TOrder obj = get(id)
+        TTplOrderItem obj = get(id)
         obj.delete(flush: true, failOnError: true)
         auditService.log(AuditOperation.DELETE, obj)
     }
