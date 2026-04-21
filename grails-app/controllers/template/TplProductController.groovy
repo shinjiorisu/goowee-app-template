@@ -1,16 +1,15 @@
 package template
 
 import goowee.commons.utils.LogUtils
+import goowee.elements.ElementsController
 import goowee.elements.components.TableRow
 import goowee.elements.contents.ContentCreate
 import goowee.elements.contents.ContentEdit
 import goowee.elements.contents.ContentTable
 import goowee.elements.controls.TextField
-import goowee.elements.ElementsController
 import goowee.elements.style.TextDefault
 import grails.plugin.springsecurity.annotation.Secured
 import groovy.util.logging.Slf4j
-
 import jakarta.annotation.PostConstruct
 
 @Slf4j

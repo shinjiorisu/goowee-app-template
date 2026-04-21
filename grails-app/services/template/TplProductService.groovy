@@ -2,14 +2,13 @@ package template
 
 import goowee.audit.AuditOperation
 import goowee.audit.AuditService
-import goowee.exceptions.ArgsException
 import grails.gorm.DetachedCriteria
 import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.transactions.Transactional
+import groovy.contracts.Requires
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
-
 import jakarta.annotation.PostConstruct
 
 @Slf4j
@@ -89,11 +88,11 @@ class TplProductService {
 
     @Transactional
     @CompileDynamic
+    @Requires({ args.id })
     TTplProduct update(Map args = [:]) {
-        Serializable id = ArgsException.requireArgument(args, 'id')
         if (args.failOnError == null) args.failOnError = false
 
-        TTplProduct obj = get(id)
+        TTplProduct obj = get(args.id)
         obj.properties = args
         obj.save(flush: true, failOnError: args.failOnError)
         return obj

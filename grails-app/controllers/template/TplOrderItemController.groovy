@@ -1,6 +1,7 @@
 package template
 
 import goowee.commons.utils.LogUtils
+import goowee.elements.ElementsController
 import goowee.elements.components.TableRow
 import goowee.elements.contents.ContentCreate
 import goowee.elements.contents.ContentEdit
@@ -9,7 +10,6 @@ import goowee.elements.controls.MoneyField
 import goowee.elements.controls.QuantityField
 import goowee.elements.controls.Select
 import goowee.elements.controls.TextField
-import goowee.elements.ElementsController
 import goowee.elements.style.TextDefault
 import goowee.types.QuantityUnit
 import grails.plugin.springsecurity.annotation.Secured
