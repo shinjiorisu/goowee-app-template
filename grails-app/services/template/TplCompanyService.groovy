@@ -62,9 +62,14 @@ class TplCompanyService {
         ]
     }
 
-    TTplCompany get(Serializable id) {
-        return buildQuery(id: id).get(fetch: fetchAll)
+    TTplCompany get(Serializable id, Boolean softDeleted = false) {
+        return find(id: id, softDeleted: softDeleted)
     }
+
+    TTplCompany find(Map filterParams) {
+        return buildQuery(filterParams).get(fetch: fetchAll)
+    }
+
 
     List<TTplCompany> list(Map filterParams = [:], Map fetchParams = [:]) {
         if (!fetchParams.sort) fetchParams.sort = [dateCreated: 'asc']

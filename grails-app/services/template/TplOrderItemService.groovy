@@ -63,9 +63,14 @@ class TplOrderItemService {
         ]
     }
 
-    TTplOrderItem get(Serializable id) {
-        return buildQuery(id: id).get(fetch: fetchAll)
+    TTplOrderItem get(Serializable id, Boolean softDeleted = false) {
+        return find(id: id, softDeleted: softDeleted)
     }
+
+    TTplOrderItem find(Map filterParams) {
+        return buildQuery(filterParams).get(fetch: fetchAll)
+    }
+
 
     List<TTplOrderItem> list(Map filterParams = [:], Map fetchParams = [:]) {
         if (!fetchParams.sort) fetchParams.sort = [dateCreated: 'asc']
