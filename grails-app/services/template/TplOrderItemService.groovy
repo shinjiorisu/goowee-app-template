@@ -63,6 +63,7 @@ class TplOrderItemService {
         ]
     }
 
+    @Requires({ id })
     TTplOrderItem get(Serializable id, Boolean softDeleted = false) {
         return find(id: id, softDeleted: softDeleted)
     }
@@ -70,7 +71,6 @@ class TplOrderItemService {
     TTplOrderItem find(Map filterParams) {
         return buildQuery(filterParams).get(fetch: fetchAll)
     }
-
 
     List<TTplOrderItem> list(Map filterParams = [:], Map fetchParams = [:]) {
         if (!fetchParams.sort) fetchParams.sort = [dateCreated: 'asc']
@@ -129,6 +129,7 @@ class TplOrderItemService {
     }
 
     @Transactional
+    @Requires({ id })
     void delete(Serializable id) {
         TTplOrderItem obj = get(id)
         obj.delete(flush: true, failOnError: true)

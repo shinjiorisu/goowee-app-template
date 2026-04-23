@@ -60,6 +60,7 @@ class TplProductService {
         ]
     }
 
+    @Requires({ id })
     TTplProduct get(Serializable id, Boolean softDeleted = false) {
         return find(id: id, softDeleted: softDeleted)
     }
@@ -67,7 +68,6 @@ class TplProductService {
     TTplProduct find(Map filterParams) {
         return buildQuery(filterParams).get(fetch: fetchAll)
     }
-
 
     List<TTplProduct> list(Map filterParams = [:], Map fetchParams = [:]) {
         if (!fetchParams.sort) fetchParams.sort = [dateCreated: 'asc']
@@ -104,6 +104,7 @@ class TplProductService {
     }
 
     @Transactional
+    @Requires({ id })
     void delete(Serializable id) {
         TTplProduct obj = get(id)
         obj.delete(flush: true, failOnError: true)
