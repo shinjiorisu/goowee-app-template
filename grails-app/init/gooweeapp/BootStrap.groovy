@@ -12,20 +12,20 @@ class BootStrap {
     ServletContext servletContext
     ApplicationService applicationService
     SecurityService securityService
-    CommonService commonService
+    InstallService installService
 
     def init = {
 
         applicationService.onInstall {
-            commonService.install()
+            installService.install()
         }
 
         applicationService.onTenantInstall { String tenantId ->
-            commonService.tenantInstall()
+            installService.tenantInstall()
         }
 
         applicationService.onDevInstall { String tenantId ->
-            commonService.devInstall()
+            installService.devInstall()
         }
 
         applicationService.beforeInit {

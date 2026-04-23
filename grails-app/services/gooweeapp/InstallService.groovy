@@ -9,7 +9,6 @@ import goowee.types.QuantityService
 import goowee.types.QuantityUnit
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
-import jakarta.annotation.PostConstruct
 import template.TplCompanyService
 import template.TplOrderItemService
 import template.TplOrderService
@@ -17,7 +16,7 @@ import template.TplProductService
 
 @Slf4j
 @CompileStatic
-class CommonService {
+class InstallService {
 
     SecurityService securityService
     TenantService tenantService
@@ -28,11 +27,6 @@ class CommonService {
     TplProductService tplProductService
     TplOrderService tplOrderService
     TplOrderItemService tplOrderItemService
-
-    @PostConstruct
-    void init() {
-        // Executes only once when the application starts
-    }
 
     void install() {
         // no-op
