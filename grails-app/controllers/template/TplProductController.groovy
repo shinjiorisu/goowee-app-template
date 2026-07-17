@@ -18,11 +18,6 @@ class TplProductController implements ElementsController {
 
     TplProductService tplProductService
 
-    @PostConstruct
-    void init() {
-        // Executes only once when the application starts
-    }
-
     def handleException(Exception e) {
         // Display a popup message instead of the "Error" screen
         log.error LogUtils.logStackTrace(e)
