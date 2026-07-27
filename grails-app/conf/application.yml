@@ -70,8 +70,8 @@ grails:
         useFilter: true
   controllers:
     upload:
-      maxFileSize: 20MB
-      maxRequestSize: 20MB
+      maxFileSize: 20000
+      maxRequestSize: 20000
 
 ---
 logs:
@@ -164,7 +164,7 @@ dataSource:
   pooled: true
   jmxExport: true
   driverClassName: org.h2.Driver
-  url: jdbc:h2:file:./gooweeapp/gooweeapp;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+  url: jdbc:h2:file:./gooweeapp/gooweeapp;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=USER
   username: sa
   password: ''
 
