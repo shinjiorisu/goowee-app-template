@@ -1,376 +1,253 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
--->
-
 ---
-
 name: goowee-developer
-description: Strict conventions and patterns for building UI controllers with Goowee, including content structure, forms, tables, and interaction handling
-license: Apache-2.0
-compatibility: opencode, claude, grok, gemini, copilot, cursor, windsurf
-metadata:
-audience: developers
-frameworks: goowee
----------------------------
+description: |
+  Expert knowledge for developing Goowee full-stack applications using Groovy and Grails.
+  Covers architecture, UI (Goowee), business logic, security, and advanced features.
+  Use this skill when building or modifying Goowee applications, UI components, services, or system configuration.
+version: 1.0.0
+tags:
+  - groovy
+  - grails
+  - goowee
+  - fullstack
+  - enterprise
+  - backend
+  - low-code
+---
 
-## What I Do
+# Goowee Developer Skill
 
-* Provide strict conventions for building UI controllers using Goowee.
-* Enforce consistent patterns for tables, forms, and modal interactions.
-* Guide the correct use of `createContent`, `display`, and UI components.
-* Ensure controllers remain clean, declarative, and UI-focused.
-* Standardize naming, structure, and interaction flows.
+## When to use this skill
+Use this skill when the task involves:
+- Building or modifying a Goowee application
+- Designing UI with Goowee Elements (ContentTable, ContentForm, etc.)
+- Implementing business logic with GORM / Grails services
+- Managing multi-tenant architecture
+- Configuring security (Spring Security / roles / permissions)
+- Customizing application UI or behavior
 
 ---
 
-## When to Use Me
+## Core Knowledge
 
-Activate this skill when working with Goowee, including:
+### Create or Initialize a Goowee Application
 
-* Building UI controllers using `ElementsController`
-* Creating tables, filters, and paginated views
-* Implementing create/edit/delete flows
-* Defining forms using Goowee components
-* Handling modal interactions and UI state
-
----
-
-## Controller Architecture
-
-Controllers represent the **presentation layer**.
-
-They MUST:
-
-* be concise
-* be declarative
-* contain NO business logic
-* delegate all operations to services
-
----
-
-## Controller Requirements
-
-### Base Structure
+- [ ] Verify that the following dependency is present in `build.gradle`: `implementation "org.apache.grails:grails-core"`. If it is missing, tell the user this is not a Grails project and stop here.
+- [ ] Add the following dependency to `build.gradle`: `implementation "org.goowee:goowee-core:3.2.0"`.
+- [ ] Add the following code to initialize the application:
 
 ```groovy
-import goowee.elements.ElementsController
-import groovy.util.logging.Slf4j
-import grails.plugin.springsecurity.annotation.Secured
+class BootStrap {
 
-@Slf4j
-@Secured(['ROLE_USER'])
-class CompanyController implements ElementsController {
+    ServletContext servletContext
+    ApplicationService applicationService
 
-    CompanyService companyService
-}
-```
+    def init = {
 
----
-
-## Action Conventions
-
-Controllers MUST define:
-
-* `index`
-* `create` / `onCreate`
-* `edit` / `onEdit`
-* `onDelete`
-
-Naming MUST NOT change.
-
----
-
-## Content Creation
-
-UI MUST be created using:
-
-```groovy
-def c = createContent(ContentTable)
-```
-
-Allowed content types:
-
-* `ContentTable`
-* `ContentCreate`
-* `ContentEdit`
-
----
-
-## Table Pattern
-
-```groovy
-def index() {
-    def c = createContent(ContentTable)
-
-    c.table.with {
-
-        filters.with {
-            addField(
-                class: TextField,
-                id: 'find',
-            )
+        applicationService.onInit {
+            // no-op // <1>
         }
 
-        sortable = [
-            name: 'asc',
-        ]
-
-        columns = [
-            'name',
-            'isActive',
-        ]
-
-        body.eachRow { TableRow row, Map values ->
-            // UI-only logic (MUST be lightweight)
-        }
-    }
-
-    c.table.body = companyService.list(c.table.filterParams, c.table.fetchParams)
-    c.table.paginate = companyService.count(c.table.filterParams)
-
-    display content: c
-}
-```
-
----
-
-## Form Pattern
-
-### Mandatory Method
-
-```groovy
-private buildForm(Company obj = null, Boolean readonly = false)
-```
-
----
-
-### Form Implementation
-
-```groovy
-private buildForm(Company obj = null, Boolean readonly = false) {
-
-    def c = obj
-        ? createContent(ContentEdit)
-        : createContent(ContentCreate)
-
-    if (readonly) {
-        c.header.removeNextButton()
-        c.form.readonly = true
-    }
-
-    c.form.with {
-        validate = Company
-
-        addField(
-            class: TextField,
-            id: 'name',
-            cols: 12,
-        )
-
-        addField(
-            class: Checkbox,
-            id: 'isActive',
-            cols: 4,
-        )
-    }
-
-    if (obj) {
-        c.form.values = obj
-    }
-
-    return c
-}
-```
-
----
-
-## CRUD Actions
-
-### Create
-
-```groovy
-def create() {
-    def c = buildForm()
-    display content: c, modal: true
-}
-```
-
-```groovy
-def onCreate() {
-    def obj = companyService.create(params)
-
-    if (obj.hasErrors()) {
-        display errors: obj
-        return
-    }
-
-    display action: 'index'
-}
-```
-
----
-
-### Edit
-
-```groovy
-def edit() {
-    def obj = companyService.get(params.id)
-    def c = buildForm(obj)
-
-    display content: c, modal: true
-}
-```
-
-```groovy
-def onEdit() {
-    def obj = companyService.update(params)
-
-    if (obj.hasErrors()) {
-        display errors: obj
-        return
-    }
-
-    display action: 'index'
-}
-```
-
----
-
-### Delete
-
-```groovy
-def onDelete() {
-    try {
-        companyService.delete(params.id)
-        display action: 'index'
-
-    } catch (Exception e) {
-        display exception: e
     }
 }
 ```
 
----
+- [ ] Delete the file `grails-app/controllers/**/UrlMappings.groovy`.
 
-## Error Handling
+- [ ] Delete all files in:
+  - `grails-app/assets/javascripts/`
+  - `grails-app/assets/stylesheets/`
+  - `grails-app/assets/images/`
+  - `grails-app/views/`
+
+- [ ] Create the following files:
+  - `grails-app/assets/javascripts/application.js`
+  - `grails-app/assets/stylesheets/application.css`
+
+- [ ] Replace `grails-app/init/BootStrap.groovy` with `BootStrap.groovy` from assets.
+
+- [ ] Replace `grails-app/conf/logback-spring.xml` with `logback-spring.xml` from assets.
+
+- [ ] Add the following configuration to `application.yml`, replacing `${project-name}` with the project name:
+```yml
+---
+server:
+  tomcat:
+    basedir: ${project-name}/tomcat
+  servlet:
+    session:
+      persistent: true
+      store-dir: ${project-name}
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+
+---
+javamelody:
+  init-parameters:
+    log: true
+    storage-directory: ${user.dir}/${project-name}/java-melody
+
+---
+grails:
+  plugin:
+    springsecurity:
+      debug:
+        useFilter: true
+  controllers:
+    upload:
+      maxFileSize: 20000000
+      maxRequestSize: 20000000
+```
+
+- [ ] Set the H2 database URL to `jdbc:h2:./project-name/project-name;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE`.
+
+- [ ] Set the `dbCreate` property to `update` for the development environment.
+
+- [ ] Add `/project-name/` to the root `.gitignore`.
+
+- [ ] Copy the `messages.properties` file from the assets to `grails-app/i18n/messages.properties`.
+
+## Create a CRUD
+
+- [ ] If the project is not a Grails project, stop here.
+- [ ] If the project is not a Goowee project because it does not depend on `org.goowee:goowee-core`, create a Goowee project first, then proceed.
+
+To create a CRUD, create the following:
+
+- [ ] Create a domain class.
+- [ ] Create a service.
+- [ ] Create a controller.
+
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
+
+## Create a Domain Class
+
+Goowee domain classes have the following characteristics.
+
+- [ ] Are located in `grails-app/domain/`
+- [ ] Are prefixed with the letter `T` (for example, `TCompany`).
+- [ ] Use the template found in `assets` to create a new domain class.
+- [ ] Have a corresponding service class in `grails-app/services/`. If it does not exist, create one for the domain class.
+- [ ] Implement the following classes and fields:
 
 ```groovy
-def handleException(Exception e) {
-    log.error e.message, e
-    display exception: e
+import java.time.LocalDateTime
+
+@GrailsCompileStatic
+class TCompany implements GormEntity, MultiTenant<TCompany> {
+
+  Long id
+  LocalDateTime dateCreated
+  LocalDateTime lastUpdated
+
 }
 ```
 
----
+- [ ] Register a pretty printer for the class in the `applicationService.onInit` method.
 
-## Code Generation Bias (CRITICAL)
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
-The following rules MUST be followed when generating code.
 
-### Variable Naming
+## Create a Service
 
-* content variable MUST be named:
+Write services using a strongly typed approach to improve code clarity and self-documentation. A service is, in every respect, part of the application’s internal API.
 
-```groovy
-def c = createContent(...)
-```
+- [ ] Ask the user for the domain class name if it is not specified in the prompt.
+- [ ] Use the template found in `assets` to create a new service.
+- [ ] The service name is not prefixed with `T`.
+- [ ] Implement the filters for each field in the specified domain class.
+- [ ] Define `fetch` properties for each relationship in the domain class.
 
-* domain instance MUST be named:
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
-```groovy
-def obj = ...
-```
 
-* request data MUST be accessed via:
+## Create a Controller
 
-```groovy
-params
-```
+Controllers are written using a scripting style. Being the highest layer of the application, they focus on readability and expressive, concise logic. Use `def` to declare variables and methods.
 
----
+- [ ] To create a controller, a domain class and a service must exist in the project. If they do not exist, ask the user to create them.
+- [ ] Use the template found in `assets` to create a new controller.
+- [ ] The controller name is not prefixed with `T`.
+- [ ] Implement the related feature in `BootStrap.groovy`. For the first controller of the application, set the `favourite` parameter to `true`.
+- [ ] Goowee provides the following component types: `Content`, `Component`, `Controller`.
+- [ ] Implement the controller using the available Goowee components.
+- [ ] Update the `messages.properties` file according to the new controller.
 
-### Structural Bias
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
-* ALWAYS use `with {}` blocks for:
+### Contents
 
-    * `c.table`
-    * `c.form`
-    * `filters`
+See the reference documentation for the available contents.
 
-* ALWAYS structure methods in this order:
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
-1. create content
-2. configure UI
-3. call service
-4. call `display`
 
----
+### Components
 
-### Method Patterns
+See the reference documentation for the available components.
 
-* `index()` MUST:
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
-    * configure table
-    * call `list` and `count`
-    * call `display`
 
-* `create()` and `edit()` MUST:
+### Controls
 
-    * call `buildForm`
-    * use `modal: true`
+See the reference documentation for the available controls.
 
-* `onCreate()` / `onEdit()` MUST:
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
-    * call service
-    * check `hasErrors()`
-    * use `display errors`
-    * redirect with `display action`
 
----
+### Actions
 
-### UI Consistency
+See the reference documentation for the available actions.
 
-* Field IDs SHOULD follow domain property names:
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
-    * `name`
-    * `isActive`
-    * `dateCreated`
 
-* Columns MUST match field IDs
+### Features
+
+See the reference documentation for the available features.
+
+IMPORTANT: Verify with the Compliance Checklist and correct if needed
 
 ---
+
+## Code Style
+
+- Prefer the `for` construct whenever possible.
+- Always use `return` in methods, except in controllers.
+
+## Compliance Checklist
+
+Verify each of the following steps before proceeding.
+
+- [ ] Implements `ElementsController`
+- [ ] Uses `@Slf4j` and `@Secured`
+- [ ] Services are injected with explicit types.
+- [ ] Uses `createContent(...)`.
+- [ ] Defines all required actions.
+- [ ] Uses `display` for responses.
+- [ ] Defines forms in `buildForm`.
+- [ ] Keeps business logic out of controllers.
+- [ ] Builds UI only with Goowee APIs.
+
+IMPORTANT: The `applicationService.onInit()` method MUST be called after the `onInstall`, `onTenantInstall`, and `onDevInstall` closures; otherwise installation will not run.
 
 ### Forbidden Deviations
 
 Generated code MUST NOT:
 
-* rename `c`, `obj`, or `params`
-* inline form definitions
-* skip `with {}` blocks
-* introduce business logic
-* bypass `display`
-
----
+- Rename `c`, `obj`, or `params`.
+- Inline form definitions.
+- Skip `with {}` blocks.
+- Introduce business logic.
+- Bypass `display`.
 
 ## Forbidden Practices
 
-* business logic inside controllers
-* direct persistence access
-* bypassing `createContent`
-* building UI outside Goowee APIs
-* defining forms outside `buildForm`
-* heavy logic inside `eachRow`
-
----
-
-## Compliance Checklist
-
-* [ ] Implements `ElementsController`
-* [ ] Uses `@Slf4j` and `@Secured`
-* [ ] Service injected with explicit type
-* [ ] Uses `createContent(...)`
-* [ ] Defines all required actions
-* [ ] Uses `display` for responses
-* [ ] Forms defined in `buildForm`
-* [ ] No business logic in controller
-* [ ] UI built only with Goowee APIs
+- Business logic inside controllers.
+- Direct persistence access.
+- Bypassing `createContent`.
+- Building UI outside Goowee APIs.
+- Defining forms outside `buildForm`.
+- Heavy logic inside `eachRow`.
