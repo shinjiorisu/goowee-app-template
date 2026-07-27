@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Used in Jenkins after uploading the '/build/libs' directory on server
+
+ROOT_USER="jenkins"
+APP_USER="gooweeapp"
+APP_NAME="gooweeapp"
+DOMAIN="com.mydomain"
+APP_HOME="/Users/${APP_USER}"
+PLIST_NAME="${DOMAIN}.${APP_NAME}"
+
+# Check if the user exists
+sudo zsh "/Users/${ROOT_USER}/${APP_NAME}/create_user.sh"
+
+echo "Installing '${APP_NAME}' application..."
+# Move application files from root to the user's home
+sudo mv /Users/${ROOT_USER}/${APP_NAME}/* /Users/${APP_USER}/
+sudo chown -R ${APP_USER}:staff /Users/${APP_USER}
+sudo chmod 770 /Users/${APP_USER}
+sudo chmod +x /Users/${APP_USER}/start
+
+echo "Installing '${APP_NAME}' service..."
+sudo mv ${APP_HOME}/${PLIST_NAME}.plist /Library/LaunchDaemons/
+sudo chown root:wheel /Library/LaunchDaemons/${PLIST_NAME}.plist
+sudo chmod 644 /Library/LaunchDaemons/${PLIST_NAME}.plist
+
+echo "Loading and starting '${APP_NAME}' service..."
+sudo launchctl bootout system /Library/LaunchDaemons/${PLIST_NAME}.plist 2>/dev/null || true
+sudo launchctl bootstrap system /Library/LaunchDaemons/${PLIST_NAME}.plist
+#  sudo launchctl kickstart -k system/${PLIST_NAME}
+
+echo "'${APP_NAME}' installed and started successfully."
