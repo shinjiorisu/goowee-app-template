@@ -11,7 +11,6 @@ import goowee.elements.controls.TextField
 import goowee.elements.style.TextDefault
 import grails.plugin.springsecurity.annotation.Secured
 import groovy.util.logging.Slf4j
-import jakarta.annotation.PostConstruct
 
 @Slf4j
 @Secured(['ROLE_USER'])
@@ -30,19 +29,19 @@ class TplCompanyController implements ElementsController {
         c.table.with {
             filters.with {
                 addField(
-                        class: TextField,
-                        id: 'find',
-                        label: TextDefault.FIND,
+                    class: TextField,
+                    id: 'find',
+                    label: TextDefault.FIND,
                 )
             }
             sortable = [
-                    name: 'asc',
+                name: 'asc',
             ]
             columns = [
-                    'name',
-                    'isOwned',
-                    'isClient',
-                    'isSupplier',
+                'name',
+                'isOwned',
+                'isClient',
+                'isSupplier',
             ]
 
             body.eachRow { TableRow row, Map values ->
@@ -58,8 +57,8 @@ class TplCompanyController implements ElementsController {
 
     private buildForm(TTplCompany obj = null, Boolean readonly = false) {
         def c = obj
-                ? createContent(ContentEdit)
-                : createContent(ContentCreate)
+            ? createContent(ContentEdit)
+            : createContent(ContentCreate)
 
         if (readonly) {
             c.header.removeNextButton()
@@ -69,26 +68,26 @@ class TplCompanyController implements ElementsController {
         c.form.with {
             validate = TTplCompany
             addField(
-                    class: TextField,
-                    id: 'name',
+                class: TextField,
+                id: 'name',
             )
             addField(
-                    class: Checkbox,
-                    id: 'isOwned',
-                    label: '',
-                    cols: 4,
+                class: Checkbox,
+                id: 'isOwned',
+                label: '',
+                cols: 4,
             )
             addField(
-                    class: Checkbox,
-                    id: 'isClient',
-                    label: '',
-                    cols: 4,
+                class: Checkbox,
+                id: 'isClient',
+                label: '',
+                cols: 4,
             )
             addField(
-                    class: Checkbox,
-                    id: 'isSupplier',
-                    label: '',
-                    cols: 4,
+                class: Checkbox,
+                id: 'isSupplier',
+                label: '',
+                cols: 4,
             )
         }
 

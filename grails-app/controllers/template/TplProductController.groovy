@@ -10,7 +10,6 @@ import goowee.elements.controls.TextField
 import goowee.elements.style.TextDefault
 import grails.plugin.springsecurity.annotation.Secured
 import groovy.util.logging.Slf4j
-import jakarta.annotation.PostConstruct
 
 @Slf4j
 @Secured(['ROLE_USER'])
@@ -29,17 +28,17 @@ class TplProductController implements ElementsController {
         c.table.with {
             filters.with {
                 addField(
-                        class: TextField,
-                        id: 'find',
-                        label: TextDefault.FIND,
+                    class: TextField,
+                    id: 'find',
+                    label: TextDefault.FIND,
                 )
             }
             sortable = [
-                    name: 'asc',
+                name: 'asc',
             ]
             columns = [
-                    'ref',
-                    'name',
+                'ref',
+                'name',
             ]
 
             body.eachRow { TableRow row, Map values ->
@@ -55,8 +54,8 @@ class TplProductController implements ElementsController {
 
     private buildForm(TTplProduct obj = null, Boolean readonly = false) {
         def c = obj
-                ? createContent(ContentEdit)
-                : createContent(ContentCreate)
+            ? createContent(ContentEdit)
+            : createContent(ContentCreate)
 
         if (readonly) {
             c.header.removeNextButton()
@@ -66,12 +65,12 @@ class TplProductController implements ElementsController {
         c.form.with {
             validate = TTplProduct
             addField(
-                    class: TextField,
-                    id: 'ref',
+                class: TextField,
+                id: 'ref',
             )
             addField(
-                    class: TextField,
-                    id: 'name',
+                class: TextField,
+                id: 'name',
             )
         }
 

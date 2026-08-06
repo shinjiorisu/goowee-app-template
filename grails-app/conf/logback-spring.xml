@@ -4,7 +4,7 @@
     <conversionRule conversionWord="highlightLogLevel" class="goowee.commons.logs.HighlightLogLevel"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <withJansi>true</withJansi>
+        <withJansi>false</withJansi>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>${CONSOLE_LOG_THRESHOLD}</level>
         </filter>
